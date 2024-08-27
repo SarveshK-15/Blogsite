@@ -8,7 +8,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
 
-      <title>Clean Blog - Start Bootstrap Theme</title>
+      <title>Blogsite Home</title>
 
       <!-- Bootstrap core CSS -->
       <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
@@ -67,11 +67,12 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <form name="addForm" id="addForm" method="POST" action="{{ url_for('addpost') }}" novalidate>
+            <form name="addForm" id="addForm" method="POST" action="{{ url_for('addpost') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label for="title">Title</label>
-                  <input type="text" class="form-control" placeholder="Title" name="title" id="title" required data-validation-required-message="Please enter a title.">
+                  <input type="text" class="form-control" placeholder="Title" name="title" id="title" required>
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
@@ -79,7 +80,7 @@
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label for="subtitle">Subtitle</label>
-                  <input type="text" class="form-control" placeholder="Subtitle" name="subtitle" id="subtitle" required data-validation-required-message="Please enter a subtitle.">
+                  <input type="text" class="form-control" placeholder="Subtitle" name="subtitle" id="subtitle" required>
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
@@ -87,7 +88,7 @@
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label for="content">Blog Content</label>
-                  <textarea rows="5" class="form-control" placeholder="Blog content" name="content" id="content" required data-validation-required-message="Please enter blog content."></textarea>
+                  <textarea rows="5" class="form-control" placeholder="Blog content" name="content" id="content" required></textarea>
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
@@ -98,6 +99,8 @@
                 <button type="submit" class="btn btn-secondary" id="sendMessageButton">Send</button>
               </div>
             </form>
+            
+            
             
           </div>
         </div>

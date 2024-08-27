@@ -24,6 +24,8 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 app.secret_key = 'SARVESH'
+app.config['SECRET_KEY'] = 'SARVESH'  # Set a secret key
+csrf = CSRFProtect(app)
 
 
 
@@ -53,12 +55,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route('/delete/<int:post_id>', methods=['POST'])
-def delete(post_id):
-    post = Blogpost.query.get_or_404(post_id)
-    db.session.delete(post)
-    db.session.commit()
-    return redirect(url_for('index'))
+
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -112,6 +109,7 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 @app.route('/post/<int:post_id>')
 def post(post_id):
@@ -167,8 +165,6 @@ def addpost():
     # Redirect to the index page after successful post addition
     return redirect(url_for('index'))
 
-
-
 @app.route('/delete/<int:post_id>', methods=['POST'])
 @login_required
 def delete_post(post_id):
@@ -183,10 +179,14 @@ def delete_post(post_id):
         db.session.commit()
         flash('Post has been deleted!', 'success')
     except Exception as e:
-        db.session.rollback()  # Rollback the transaction on error
+        db.session.rollback()
         flash('An error occurred while trying to delete the post.', 'danger')
-        print(e)  # For debugging purposes
+        print(e)
 
     return redirect(url_for('index'))
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

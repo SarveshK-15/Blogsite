@@ -1,30 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="A detailed blog post.">
-  <meta name="author" content="{{ post.author }}">
-
-  <title>{{ post.title }} - Blogsite</title>
-
-  <!-- Bootstrap core CSS -->
+  <meta name="description" content="Edit blog post">
+  <meta name="author" content="Sarvesh">
+  <title>Edit Post - Blogsite</title>
   <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
-
-  <!-- Custom fonts for this template -->
   <link href="{{ url_for('static', filename='font-awesome.min.css') }}" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-  <!-- Custom styles for this template -->
   <link href="{{ url_for('static', filename='clean-blog.min.css') }}" rel="stylesheet">
-
 </head>
-
 <body>
-
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
@@ -48,56 +36,46 @@
       </div>
     </div>
   </nav>
-
+  
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url('{{ url_for('static', filename='post-bg.jpg') }}')">
+  <header class="masthead">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-heading">
-            <h1>{{ post.title }}</h1>
-            <h2 class="subheading">{{ post.subtitle }}</h2>
-            <span class="meta">Posted by
-              {{ post.author }} on {{ post.date_posted.strftime('%B %d, %Y') }}
-            </span>
-          </div>
+          <h1>Edit Post</h1>
         </div>
       </div>
     </div>
   </header>
-
-  <!-- Post Content -->
+  
+  <!-- Post Edit Form -->
   <article>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          {{ post.content|safe }}
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+              {{ form.title.label(class="form-control-label") }}
+              {{ form.title(class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ form.subtitle.label(class="form-control-label") }}
+              {{ form.subtitle(class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ form.content.label(class="form-control-label") }}
+              {{ form.content(class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ form.submit(class="btn btn-primary") }}
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </article>
-  {% if current_user.is_authenticated and post.author == current_user.username %}
-  <div class="text-center">
-    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-outline-secondary mx-2">
-      Edit Post
-    </a>
-    <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST" style="display: inline-block; margin: 0;">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <button type="submit" class="btn btn-outline-danger mx-2">
-        Delete Post
-      </button>
-    </form>
-  </div>
-{% endif %}
- 
-
-
-
-
-
-
-  <hr>
-
+  
   <!-- Footer -->
   <footer>
     <div class="container">
@@ -108,15 +86,10 @@
       </div>
     </div>
   </footer>
-
-  <!-- Bootstrap core JavaScript -->
+  
   <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
   <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
-
-  <!-- Custom scripts for this template -->
   <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
-
 </body>
-
 </html>

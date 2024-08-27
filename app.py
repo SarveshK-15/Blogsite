@@ -165,6 +165,29 @@ def addpost():
     # Redirect to the index page after successful post addition
     return redirect(url_for('index'))
 
+
+@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = Blogpost.query.get_or_404(post_id)
+    
+    if post.author != current_user.username:
+        flash("You don't have permission to edit this post.", "danger")
+        return redirect(url_for('index'))
+
+    form = PostForm(obj=post)
+    
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.subtitle = form.subtitle.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Post has been updated!', 'success')
+        return redirect(url_for('post', post_id=post.id))
+    
+    return render_template('edit_post.html', form=form, post=post)
+
+
 @app.route('/delete/<int:post_id>', methods=['POST'])
 @login_required
 def delete_post(post_id):

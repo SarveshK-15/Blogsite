@@ -9,8 +9,13 @@ from wtforms import StringField, PasswordField, EmailField
 from wtforms.validators import DataRequired, Email, Length
 from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, TextAreaField, SubmitField
+from werkzeug.security import check_password_hash, generate_password_hash
+
+
 
 from flask_wtf.csrf import generate_csrf
+from flask_bcrypt import Bcrypt
+
 
 
 app = Flask(__name__)
@@ -216,8 +221,26 @@ def delete_post(post_id):
         flash('An error occurred while trying to delete the post.', 'danger')
         print(e)
 
+    # Check if the redirect parameter is set to "your_blogs"
+    redirect_url = request.form.get('redirect', None)
+    if redirect_url == 'your_blogs':
+        return redirect(url_for('your_blogs'))
+
+    # Default redirection if not from "Your Blogs"
     return redirect(url_for('index'))
 
+@app.route('/your_blogs')
+@login_required
+def your_blogs():
+    # Fetch blogs where the current user is the author
+    blogs = Blogpost.query.filter_by(author=current_user.username).all()
+    return render_template('your_blogs.html', blogs=blogs)
+
+@app.route('/profile_info')
+@login_required
+def profile_info():
+    # Logic to display user profile information
+    return render_template('profile_info.html', user=current_user)
 
 
 

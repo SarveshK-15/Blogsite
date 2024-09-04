@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .blog-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        overflow: hidden; /* Ensures content doesn't overflow the item */
+        padding: 10px; /* Adds padding inside the item */
+        margin-bottom: 10px; /* Space between list items */
+        border: 1px solid #ddd; /* Optional: adds a border to visually separate items */
+        border-radius: 5px; /* Optional: rounds the corners of the border */
+    }
+
+    .blog-content {
+        flex: 1; /* Allows content to take up remaining space */
+        word-wrap: break-word; /* Ensures long words wrap to the next line */
+        overflow: hidden; /* Ensures content doesn't overflow */
+        padding-right: 10px; /* Adds padding to the right for spacing */
+
+    }
+
+    .blog-title {
+        font-size: 1.25rem; /* Increases font size for the title */
+        font-weight: bold; /* Makes the title bold */
+        margin-bottom: 5px; /* Adds space below the title */
+        overflow-wrap: break-word; /* Breaks long words if needed */
+        text-overflow: ellipsis; /* Adds ellipsis if text overflows */
+        white-space: normal; /* Allows wrapping */
+        overflow: visible; /* Ensures text is visible */
+
+    }
+
+    .blog-subtitle {
+        font-size: 0.875rem; /* Slightly smaller font size for subtitle */
+        color: #6c757d; /* Lighter color for subtitle */
+        overflow-wrap: break-word; /* Breaks long words if needed */
+    }
+
+    .blog-actions {
+        gap: 10px; /* Space between buttons */
+        align-items: center; /* Vertically aligns buttons */
+    }
+
+
+    .btn {
+        display: inline-flex; /* Ensures button sizing */
+        align-items: center;
+        justify-content: center;
+        padding: 0.375rem 0.75rem; /* Adjust padding for consistent sizing */
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.375rem; /* Same border radius for both buttons */
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+    }
+</style>
+<div class="container">
+    <h2 class="mt-4">Your Blogs</h2>
+    {% if blogs %}
+    <ul class="list-group mt-3">
+        {% for blog in blogs %}
+        <li class="list-group-item d-flex justify-content-between align-items-start blog-item">
+            <div class="blog-content">
+                <h5 class="blog-title">{{ blog.title }}</h5>
+                <p class="mb-1 blog-subtitle"><small>{{ blog.subtitle }}</small></p>
+                <p class="mb-0"><small>Posted on {{ blog.date_posted.strftime('%B %d, %Y') }}</small></p>
+            </div>
+            <div class="blog-actions">
+                <a href="{{ url_for('edit_post', post_id=blog.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{{ url_for('delete_post', post_id=blog.id) }}" method="POST" style="display: inline-block; margin: 0;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="redirect" value="your_blogs"> <!-- Add this line -->
+                    <button type="submit" class="btn btn-outline-danger mx-2">
+                        Delete Post
+                    </button>
+                </form>
+                
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="mt-3">You have not authored any blogs yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -62,6 +62,16 @@ def load_user(user_id):
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        if existing_email:
+            flash('Email address already exists. Please use a different email.', 'danger')
+            return redirect(url_for('register'))
+        
+        existing_username = User.query.filter_by(username=form.username.data).first()
+        if existing_username:
+            flash('Username already exists. Please choose a different username.', 'danger')
+            return redirect(url_for('register'))
+        
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         new_user = User(username=form.username.data, name=form.name.data, email=form.email.data, password=hashed_password)
         db.session.add(new_user)

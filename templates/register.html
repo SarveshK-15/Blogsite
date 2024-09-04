@@ -5,10 +5,24 @@
     <title>Register</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        /* Ensure the close button is positioned correctly */
+        .alert .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        /* Ensure flash messages are visible below the form */
+        #flash-message-container {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    
     <div class="container">
         <h2>Register</h2>
+        
         <form method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group">
@@ -29,6 +43,37 @@
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
+
+        <!-- Display Flash Messages Below Form -->
+        <div id="flash-message-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="alert alert-dismissible fade show" role="alert" id="flash-message">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
     </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script>
+        // Automatically hide the flash message after 5 seconds
+        setTimeout(function() {
+            var flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.classList.remove('show');
+                flashMessage.classList.add('fade');
+            }
+        }, 5000);
+    </script>
 </body>
 </html>
